@@ -25,7 +25,7 @@
             }
 
             .flex-center {
-                align-items: center;
+                align-student: center;
                 display: flex;
                 justify-content: center;
             }
@@ -55,7 +55,7 @@
                 font-weight: 600;
                 letter-spacing: .1rem;
                 text-decoration: none;
-                text-transform: uppercase;
+                text-transform: upperstudent;
             }
 
             .m-b-md {
