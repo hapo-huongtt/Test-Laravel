@@ -1,11 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\student;
-
-class student_Controller extends Controller
+use App\Http\Requests\StoreStudent;
+class StudentController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +14,6 @@ class student_Controller extends Controller
     public function index()
     {
         $students = student::all();
-
         return view('index', compact('students'));
     }
 
@@ -38,19 +36,8 @@ class student_Controller extends Controller
     public function store(Request $request)
     {
         
-        $request->validate([
-            'name'=>'required',
-            'address'=>'required',
-            'email'=>'required'
-        ]);
-
-        $student = new student([
-            'name' => $request->get('name'),
-            'address' => $request->get('address'),
-            'email' => $request->get('email'),
-        ]);
-        $student->save();
-        return redirect('/students')->with('success', 'student saved!');
+        Student::create($request->only(['name', 'address', 'email']));
+        return redirect('index')->with('success', 'Student save!');
     }
 
     /**
@@ -72,8 +59,8 @@ class student_Controller extends Controller
      */
     public function edit($id)
     {
-        $student= student::find($id);
-        return view('edit', compact('student'));  
+        $student = Student::find($id);
+        return view('edit', compact('student'));
     }
 
     /**
@@ -83,9 +70,11 @@ class student_Controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreStudent $request, $id)
     {
-        //
+        $student = Student::findOrFail($id);
+        $student->update($request->only(['name', 'address', 'email']));
+        return redirect()->route('index')->with('success', 'Student update!');
     }
 
     /**
@@ -96,9 +85,10 @@ class student_Controller extends Controller
      */
     public function destroy($id)
     {
-        $student = student::find($id);
+        
+        $student = student::findOrFail($id);
         $student->delete();
 
-        return redirect('/students')->with('success', 'students deleted!');
+        return redirect('/students')->with('students', 'student is successfully deleted');
     }
 }
