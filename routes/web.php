@@ -16,3 +16,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::resource('students', 'student_Controller');
+Route::get('students/{id}/edit', 'student_Controller@edit');
+Route::patch('students/{id}', 'student_Controller@update');
